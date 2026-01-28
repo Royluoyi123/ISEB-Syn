@@ -15,6 +15,4 @@ Before running the prediction, you need to preprocess the raw biological dataset
 Run the following command to generate the necessary data files:
 ```bash
 python data.py
-
-```bash
 python main.py
