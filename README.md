@@ -15,4 +15,10 @@ Before running the prediction, you need to preprocess the raw biological dataset
 Run the following command to generate the necessary data files:
 ```bash
 python data.py
+
+This script will output processed tensors or graph objects into the ddsdata/ directory.
+
+2. Run Prediction
+Once the data files are ready, you can execute the main training and inference pipeline:
+
 python main.py
