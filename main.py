@@ -36,21 +36,29 @@ def experiment():
         row[0]: torch.tensor(row[1:].astype(np.float32)) # 将每行的值转为 Tensor
         for row in gene_exp.to_numpy()
     }
-    for args.lr in [1e-5,1e-4,1e-3]:
-        for args.weight_decay in [0,1e-5]:
-            for args.dropout in [0.2,0.3,0.4,0.5,0.6]:
-                for args.beta_1 in [1e-4]:
-                    for args.beta_2 in [1e-4]:
+    # gene_exp = pd.read_csv('IGIB-ISE_DDI/ddsdata/'+"GDSC640"+'/cell_line_gene_expression.csv',header=0)
+    # # 将 DataFrame 的第一列作为字典的 key，剩余列作为 Tensor 作为 value
+    # gene_exp_dict_train = {
+    #     row[0]: torch.tensor(row[1:].astype(np.float32)) # 将每行的值转为 Tensor
+    #     for row in gene_exp.to_numpy()
+    # }
+    for args.lr in [1e-5]:
+        for args.weight_decay in [0]:
+            for args.dropout in [0,0.1,0.2,0.3,0.4,0.5]:
+                #for args.beta_1 in [1e-4]:
+                    #for args.beta_2 in [1e-4]:
+                    for args.beta_1, args.beta_2 in [(1e-6,1e-6)]:
                         for args.tau in [0.2]:
                             best_aucs, best_auprs, best_accs, best_kappas, best_baccs, best_f1s, best_mccs = [], [], [], [], [], [], []
                             for repeat in range(1, args.repeat + 1):
                                 for fold in range(1, 6):
                                     train_set = torch.load("IGIB-ISE_DDI/ddsdata/"+str(args.dataset)+"/processed/classification10/"+args.setting+"/train_"+str(fold)+".pt")
                                     test_set = torch.load("IGIB-ISE_DDI/ddsdata/"+str(args.dataset)+"/processed/classification10/"+args.setting+"/test_"+str(fold)+".pt")
-
+                                    #train_set = torch.load("IGIB-ISE_DDI/ddsdata/"+str(args.dataset)+"/processed/"+args.setting+"/train.pt")
+                                    #test_set = torch.load("IGIB-ISE_DDI/ddsdata/"+str(args.dataset)+"/processed/"+args.setting+"/test.pt")
                                     print("Dataset Loaded! ({:.4f} sec)".format(time.time() - start))
     
-                                    stats, config_str = main(args, train_set, test_set, gene_exp_dict, repeat = repeat, fold = fold)
+                                    stats, config_str = main(args, train_set, test_set, gene_exp_dict,   repeat = repeat, fold = fold)
         
                                     # get Stats
                                     best_aucs.append(stats[0])
